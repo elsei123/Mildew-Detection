@@ -15,3 +15,12 @@ def load_trained_model():
         return model
     except Exception as e:
         raise IOError(f"Error loading the model: {e}")
+
+def predict_image(model, image):
+    """
+    Receives the model and a preprocessed image, performing the prediction.
+    """
+    import numpy as np
+    image = image.reshape((1, *image.shape))
+    prediction = model.predict(image)
+    return prediction
