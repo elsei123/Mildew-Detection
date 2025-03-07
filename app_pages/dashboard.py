@@ -83,7 +83,7 @@ st.title("🍒 Cherry Leaf Mildew Detector 🍃")
 
 # Sidebar menu for navigation
 menu = st.sidebar.radio(
-    "📌 Navigation", ["🏠 Home", "📸 Prediction", "📊 Analysis"])
+    "📌 Navigation", ["🏠 Home", "📸 Prediction", "📊 Analysis",  "🔍 Findings", "🧪 Hypothesis", "💻 Technical"])
 
 # Home Page
 if menu == "🏠 Home":
@@ -119,6 +119,17 @@ if menu == "🏠 Home":
             ✅ <b>Higher Profitability</b>: Effective protection against harvest losses.
         </p>
     """, unsafe_allow_html=True)
+
+# Prediction Page
+elif page == "📸 Prediction":
+    st.title("📸 Prediction")
+    st.markdown("""
+    Upload images of cherry leaves so that the model can analyze and predict whether the leaf is healthy or has powdery mildew.
+    """)
+    st.markdown("[Download sample cherry leaf images](https://www.kaggle.com/datasets)  <!-- Update with the actual link if available -->")
+    
+    uploaded_files = st.file_uploader("🖼️ Select images...", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
+    
 
     # Prediction Page
 elif menu == "📸 Prediction":
