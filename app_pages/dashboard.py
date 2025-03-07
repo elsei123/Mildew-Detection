@@ -246,3 +246,20 @@ elif page == "🔍 Findings":
             mean_image = (sum_image / count).astype(np.uint8)
             std_image = np.std(np.array(images), axis=0).astype(np.uint8)
             
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.image(cv2.cvtColor(mean_image, cv2.COLOR_BGR2RGB), caption=f"Mean Image: {cls.capitalize()}")
+            with col2:
+                st.image(cv2.cvtColor(std_image, cv2.COLOR_BGR2RGB), caption=f"Variability: {cls.capitalize()}")
+            with col3:
+                montage_images = []
+                for sample in files[:6]:
+                    sample_path = os.path.join(folder, sample)
+                    img = cv2.imread(sample_path)
+                    img = cv2.resize(img, (128, 128))
+                    montage_images.append(img)
+                if montage_images:
+                    montage = np.hstack(montage_images)
+                    st.image(cv2.cvtColor(montage, cv2.COLOR_BGR2RGB), caption=f"Montage: {cls.capitalize()}")
+        else:
+            st.write(f"No images found for class {cls}.")
