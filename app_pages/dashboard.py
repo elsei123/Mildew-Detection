@@ -37,6 +37,16 @@ def predict_image(model, image):
     prediction = model.predict(image)
     return prediction
 
+def get_sample_data():
+    """
+    Returns a DataFrame with sample data for visualizations.
+    """
+    data = pd.DataFrame({
+        'Month': range(1, 13),
+        'Value': np.random.randint(50, 150, 12)
+    })
+    return data.set_index('Month')
+
 
 
 # Configure Streamlit page layout
