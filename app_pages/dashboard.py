@@ -13,6 +13,23 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+@st.cache_resource(show_spinner=False)
+def load_trained_model():
+    """
+    Loads and returns the trained model from the absolute path using caching to avoid reloading each time.
+    """
+    model_path = os.path.abspath("src/model.h5")
+    if not os.path.exists(model_path):
+        st.error(f"Error: Model not found at {model_path}")
+        return None
+    try:
+        model = load_model(model_path)
+        return model
+    except Exception as e:
+        st.error(f"Error loading the model: {e}")
+        return None
+
+
 # Configure Streamlit page layout
 st.set_page_config(page_title="Mildew Detection Dashboard", layout="wide")
 
