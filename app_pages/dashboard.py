@@ -226,3 +226,23 @@ elif page == "🔍 Findings":
     st.markdown("### Visual Study of Cherry Leaf Images")
     data_dir = "../cherry-leaves/"
     classes = ['healthy', 'powdery_mildew']
+
+    for cls in classes:
+        st.markdown(f"#### Class: {cls.capitalize()}")
+        folder = os.path.join(data_dir, cls)
+        files = list_images_in_folder(folder)
+        if files:
+            sum_image = None
+            count = 0
+            images = []
+            for f in files:
+                img_path = os.path.join(folder, f)
+                image = cv2.imread(img_path)
+                image = cv2.resize(image, (128, 128))
+                image = image.astype(np.float32)
+                images.append(image)
+                sum_image = image if sum_image is None else sum_image + image
+                count += 1
+            mean_image = (sum_image / count).astype(np.uint8)
+            std_image = np.std(np.array(images), axis=0).astype(np.uint8)
+            
