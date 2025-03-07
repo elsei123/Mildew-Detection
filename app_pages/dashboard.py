@@ -157,6 +157,20 @@ elif page == "📸 Prediction":
                 st.pyplot(fig)
                 st.write(f"**Prediction:** {label} (Confidence: {prediction:.2f})")
             
+            st.subheader("Prediction Results")
+            df_results = pd.DataFrame(results)
+            st.dataframe(df_results)
+            
+            csv = df_results.to_csv(index=False).encode('utf-8')
+            st.download_button(
+                label="Download Prediction Results",
+                data=csv,
+                file_name='prediction_results.csv',
+                mime='text/csv'
+            )
+        else:
+            st.error("The model is not available. Please verify that it has been trained and saved correctly.")
+
     # Prediction Page
 elif menu == "📸 Prediction":
     st.header("📌 Make a Prediction")
