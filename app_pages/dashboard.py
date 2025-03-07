@@ -126,3 +126,53 @@ elif menu == "📸 Prediction":
         df_results = pd.DataFrame(results)
         st.dataframe(df_results)
 
+# Analysis Page
+elif menu == "📊 Analysis":
+    st.header("📈 Model Analysis")
+    
+    labels = ["Healthy", "Powdery Mildew"]
+    values = [1200, 900]
+    
+    st.subheader("📊 Bar Chart - Prediction Distribution")
+    fig, ax = plt.subplots(figsize=(4, 2.5))
+    ax.bar(labels, values, color=["green", "red"])
+    ax.set_ylabel("Number of Samples", fontsize=10)
+    ax.set_title("Prediction Distribution", fontsize=12)
+    ax.tick_params(axis='both', labelsize=8)
+    st.pyplot(fig)
+    st.caption("Distribution of predictions between healthy and infected leaves")
+    
+    st.subheader("🟠 Pie Chart - Classification Proportion")
+    fig, ax = plt.subplots(figsize=(4, 2.5))
+    ax.pie(values, labels=labels, autopct='%1.1f%%', colors=["green", "red"])
+    ax.set_title("Proportion of Healthy vs. Powdery Mildew", fontsize=12)
+    st.pyplot(fig)
+    st.caption("Proportion of healthy vs. infected leaves")
+
+    st.subheader("📉 Line Chart - Accuracy History")
+    history_file = "../jupyter_notebooks/history.npy"
+    if os.path.exists(history_file):
+        history_data = np.load(history_file, allow_pickle=True).item()
+        fig, ax = plt.subplots(figsize=(4, 2.5))
+        ax.plot(history_data["accuracy"], label="Training", linestyle='-', marker='o')
+        ax.plot(history_data["val_accuracy"], label="Validation", linestyle='-', marker='s')
+        ax.set_title("Accuracy Evolution", fontsize=12)
+        ax.set_xlabel("Epochs", fontsize=10)
+        ax.set_ylabel("Accuracy", fontsize=10)
+        ax.tick_params(axis='both', labelsize=8)
+        ax.legend(fontsize=8)
+        st.pyplot(fig)
+        st.caption("Model accuracy history during training")
+    else:
+        dummy_history = {"accuracy": [0.7, 0.8, 0.85, 0.9], "val_accuracy": [0.65, 0.75, 0.8, 0.85]}
+        fig, ax = plt.subplots(figsize=(4, 2.5))
+        ax.plot(dummy_history["accuracy"], label="Training", linestyle='-', marker='o')
+        ax.plot(dummy_history["val_accuracy"], label="Validation", linestyle='-', marker='s')
+        ax.set_title("Accuracy Evolution", fontsize=12)
+        ax.set_xlabel("Epochs", fontsize=10)
+        ax.set_ylabel("Accuracy", fontsize=10)
+        ax.tick_params(axis='both', labelsize=8)
+        ax.legend(fontsize=8)
+        st.pyplot(fig)
+        st.caption("Model accuracy history during training (sample data)")
+
