@@ -146,6 +146,17 @@ elif page == "📸 Prediction":
                     img_array = img_array[:, :, :3]
                 img_array = img_array.astype('float32') / 255.0
 
+                prediction = model.predict(np.expand_dims(img_array, axis=0))[0][0]
+                label = "Healthy 🍃" if prediction < threshold else "Powdery Mildew ⚠️"
+                results.append({"Image": uploaded_file.name, "Prediction": label, "Confidence": f"{prediction:.2f}"})
+                
+                fig, ax = plt.subplots(figsize=(4, 3))
+                ax.bar(["Healthy", "Powdery Mildew"], [1 - prediction, prediction], color=["green", "red"])
+                ax.set_ylabel("Probability")
+                ax.set_title("Prediction")
+                st.pyplot(fig)
+                st.write(f"**Prediction:** {label} (Confidence: {prediction:.2f})")
+            
     # Prediction Page
 elif menu == "📸 Prediction":
     st.header("📌 Make a Prediction")
