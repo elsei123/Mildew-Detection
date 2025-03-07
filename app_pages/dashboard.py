@@ -77,4 +77,52 @@ if menu == "🏠 Home":
         </p>
     """, unsafe_allow_html=True)
 
-    
+    # Prediction Page
+elif menu == "📸 Prediction":
+    st.header("📌 Make a Prediction")
+    st.markdown("""
+    <p class='content'>
+        In this section, you can upload images of cherry leaves for the artificial intelligence model to analyze
+        and determine whether the leaf is <b>healthy</b> or <b>infected with powdery mildew</b>. 
+        Early detection can help in disease prevention and control, improving agricultural production quality.
+    </p>
+    """, unsafe_allow_html=True)
+
+    uploaded_files = st.file_uploader("🖼️ Select images...", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
+
+    if uploaded_files:
+        model = load_trained_model()
+        threshold = 0.5
+        results = []
+        for uploaded_file in uploaded_files:
+            image = Image.open(uploaded_file)
+            image_resized = image.resize((256, 256))
+            st.image(image_resized, caption="Uploaded Image (256x256 px)",use_column_width=False)
+
+            img_array = np.array(image_resized)
+            if img_array.shape[-1] == 4:
+                img_array = img_array[:, :, :3]
+            img_array = img_array.astype('float32') / 255.0
+            img_array = np.expand_dims(img_array, axis=0)
+
+            prediction = model.predict(img_array)[0][0]
+            label = "Healthy 🍃" if prediction < threshold else "Powdery Mildew ⚠️"
+            confidence = float(prediction)
+            results.append({"Image": uploaded_file.name, "Class": label, "Confidence": confidence})
+
+            fig, ax = plt.subplots(figsize=(6, 3))
+            ax.bar(["Healthy", "Powdery Mildew"], [1 - confidence, confidence], color=["green", "red"])
+            ax.set_ylabel("Probability", fontsize=12)
+            ax.set_title("Leaf Classification", fontsize=14)
+            ax.tick_params(axis='both', labelsize=10)
+            st.pyplot(fig)
+            
+            if label == "Healthy 🍃":
+                st.write("<p style='color: green; text-align: center; font-size: 20px;'>No anomalies detected in the leaf.</p>", unsafe_allow_html=True)
+            else:
+                st.write("<p style='color: red; text-align: center; font-size: 20px;'>Powdery mildew detected on the leaf.</p>", unsafe_allow_html=True)
+                
+        st.write("🔍 **Prediction Results**")
+        df_results = pd.DataFrame(results)
+        st.dataframe(df_results)
+
