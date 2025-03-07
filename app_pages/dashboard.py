@@ -301,4 +301,11 @@ elif page == "💻 Technical":
     - Uses ImageDataGenerator with data augmentation.  
     - Trained for 10 epochs with 20% of data reserved for validation.
     """)
-
+    st.markdown("#### Model Summary")
+    model = load_trained_model()
+    if model:
+        model_summary = []
+        model.summary(print_fn=lambda x: model_summary.append(x))
+        st.text("\n".join(model_summary))
+    else:
+        st.write("Model is not available for summary display.")
