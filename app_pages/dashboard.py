@@ -120,56 +120,6 @@ if menu == "🏠 Home":
         </p>
     """, unsafe_allow_html=True)
 
-# Prediction Page
-elif page == "📸 Prediction":
-    st.title("📸 Prediction")
-    st.markdown("""
-    Upload images of cherry leaves so that the model can analyze and predict whether the leaf is healthy or has powdery mildew.
-    """)
-    st.markdown("[Download sample cherry leaf images](https://www.kaggle.com/datasets)  <!-- Update with the actual link if available -->")
-    
-    uploaded_files = st.file_uploader("🖼️ Select images...", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
-    if uploaded_files:
-        model = load_trained_model()
-        if model:
-            threshold = 0.5
-            results = []
-            for uploaded_file in uploaded_files:
-                pil_image = Image.open(uploaded_file)
-                st.image(pil_image, caption=f"Uploaded Image: {uploaded_file.name}", use_column_width=True)
-                
-                image_resized = pil_image.resize((256, 256))
-                st.image(image_resized, caption="Resized (256x256)", use_column_width=False)
-                
-                img_array = np.array(image_resized)
-                if img_array.shape[-1] == 4:
-                    img_array = img_array[:, :, :3]
-                img_array = img_array.astype('float32') / 255.0
-
-                prediction = model.predict(np.expand_dims(img_array, axis=0))[0][0]
-                label = "Healthy 🍃" if prediction < threshold else "Powdery Mildew ⚠️"
-                results.append({"Image": uploaded_file.name, "Prediction": label, "Confidence": f"{prediction:.2f}"})
-                
-                fig, ax = plt.subplots(figsize=(4, 3))
-                ax.bar(["Healthy", "Powdery Mildew"], [1 - prediction, prediction], color=["green", "red"])
-                ax.set_ylabel("Probability")
-                ax.set_title("Prediction")
-                st.pyplot(fig)
-                st.write(f"**Prediction:** {label} (Confidence: {prediction:.2f})")
-            
-            st.subheader("Prediction Results")
-            df_results = pd.DataFrame(results)
-            st.dataframe(df_results)
-            
-            csv = df_results.to_csv(index=False).encode('utf-8')
-            st.download_button(
-                label="Download Prediction Results",
-                data=csv,
-                file_name='prediction_results.csv',
-                mime='text/csv'
-            )
-        else:
-            st.error("The model is not available. Please verify that it has been trained and saved correctly.")
 
     # Prediction Page
 elif menu == "📸 Prediction":
@@ -270,3 +220,9 @@ elif menu == "📊 Analysis":
         st.pyplot(fig)
         st.caption("Model accuracy history during training (sample data)")
 
+# Findings Page
+elif page == "🔍 Findings":
+    st.title("🔍 Findings")
+    st.markdown("### Visual Study of Cherry Leaf Images")
+    data_dir = "../cherry-leaves/"
+    classes = ['healthy', 'powdery_mildew']
