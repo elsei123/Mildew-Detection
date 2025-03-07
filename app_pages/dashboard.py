@@ -34,3 +34,47 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
+
+# Set the page title
+st.title("🍒 Cherry Leaf Mildew Detector 🍃")
+
+# Sidebar menu for navigation
+menu = st.sidebar.radio(
+    "📌 Navigation", ["🏠 Home", "📸 Prediction", "📊 Analysis"])
+
+# Home Page
+if menu == "🏠 Home":
+    st.markdown("<h2 class='sub-title'>🌿 Artificial Intelligence for Sustainable Farming</h2>",
+                unsafe_allow_html=True)
+    st.markdown("""
+        <p class='content'>
+            The <b>Cherry Leaf Mildew Detector</b> uses <b>artificial intelligence</b> to detect <span class='highlight'>powdery mildew</span> at an early stage, 
+            a fungal disease that can compromise the entire cherry harvest. With our technology, farmers can take quick action, 
+            preventing losses and optimizing crop yield.
+        </p>
+        <h2 class='section-title'>🦠 What is Powdery Mildew?</h2>
+        <p class='content'>
+            <b>Powdery mildew</b> is a disease caused by the fungus <i>Podosphaera clandestina</i>, which spreads rapidly in humid environments.
+            It forms a <span class='highlight'>white powdery layer</span> on the leaves, affecting plant growth and drastically reducing production.
+        </p>
+        <h2 class='section-title'>🧐 How to Identify the Symptoms?</h2>
+        <p class='content'>
+            ✅ Small <b>white spots</b> start appearing on younger leaves.<br>
+            ✅ Leaves may <b>deform and curl</b> as the infection progresses.<br>
+            ✅ In advanced stages, the fungus spreads to both sides of the leaf.<br>
+            🌡 The disease thrives in <b>humid climates and excessive irrigation</b>.
+        </p>
+        <h2 class='section-title'>🔬 How Does Artificial Intelligence Work?</h2>
+        <p class='content'>
+            Our AI analyzes leaf images and determines with high accuracy whether the tree is <span class='highlight'>healthy or infected</span>.
+            This enables efficient monitoring and more effective preventive actions.
+        </p>
+        <h2 class='section-title'>💼 Benefits for Farmers</h2>
+        <p class='content'>
+            ✅ <b>Automated Monitoring</b>: Reduces time spent on manual inspections.<br>
+            ✅ <b>Smart Use of Fungicides</b>: Application only when necessary, reducing costs.<br>
+            ✅ <b>Higher Profitability</b>: Effective protection against harvest losses.
+        </p>
+    """, unsafe_allow_html=True)
+
+    
