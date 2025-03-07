@@ -29,6 +29,15 @@ def load_trained_model():
         st.error(f"Error loading the model: {e}")
         return None
 
+def predict_image(model, image):
+    """
+    Receives the model and a preprocessed image, and performs the prediction.
+    """
+    image = image.reshape((1, *image.shape))
+    prediction = model.predict(image)
+    return prediction
+
+
 
 # Configure Streamlit page layout
 st.set_page_config(page_title="Mildew Detection Dashboard", layout="wide")
