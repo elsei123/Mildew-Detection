@@ -129,7 +129,22 @@ elif page == "📸 Prediction":
     st.markdown("[Download sample cherry leaf images](https://www.kaggle.com/datasets)  <!-- Update with the actual link if available -->")
     
     uploaded_files = st.file_uploader("🖼️ Select images...", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
-    
+    if uploaded_files:
+        model = load_trained_model()
+        if model:
+            threshold = 0.5
+            results = []
+            for uploaded_file in uploaded_files:
+                pil_image = Image.open(uploaded_file)
+                st.image(pil_image, caption=f"Uploaded Image: {uploaded_file.name}", use_column_width=True)
+                
+                image_resized = pil_image.resize((256, 256))
+                st.image(image_resized, caption="Resized (256x256)", use_column_width=False)
+                
+                img_array = np.array(image_resized)
+                if img_array.shape[-1] == 4:
+                    img_array = img_array[:, :, :3]
+                img_array = img_array.astype('float32') / 255.0
 
     # Prediction Page
 elif menu == "📸 Prediction":
