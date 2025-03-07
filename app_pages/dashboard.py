@@ -263,3 +263,20 @@ elif page == "🔍 Findings":
                     st.image(cv2.cvtColor(montage, cv2.COLOR_BGR2RGB), caption=f"Montage: {cls.capitalize()}")
         else:
             st.write(f"No images found for class {cls}.")
+
+# Hypothesis Page
+elif page == "🧪 Hypothesis":
+    st.title("🧪 Hypothesis and Validation")
+    st.markdown("""
+    **Hypothesis:**  
+    Visual analysis combined with a CNN can effectively differentiate healthy cherry leaves from those infected with powdery mildew.
+
+    **Validation Approach:**  
+    - Train and validate a CNN model.
+    - Compare predictions against real data.
+    - Perform visual analysis (mean image, variability, montage) to highlight differences.
+    
+    **Performance Goal:**  
+    Achieve at least 97% prediction accuracy.
+    """)
+    st.markdown("Validation results and model analysis metrics are presented on the 'Analysis' page.")
