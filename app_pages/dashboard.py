@@ -343,6 +343,22 @@ elif menu == "💻 Technical":
         st.text("\n".join(model_summary))
     else:
         st.write("Model is not available for summary display.")
+    
+    st.markdown("### Model Performance Comparison")
+    threshold_accuracy = 0.97
+
+    dummy_history = {
+        "accuracy": [0.70, 0.75, 0.80, 0.85, 0.88, 0.90, 0.92, 0.93, 0.95, 0.96],
+        "val_accuracy": [0.68, 0.72, 0.77, 0.80, 0.84, 0.87, 0.89, 0.90, 0.91, 0.93]
+    }
+
+    best_val_acc = max(dummy_history["val_accuracy"])
+    st.write(f"**Best Validation Accuracy:** {best_val_acc*100:.2f}%")
+
+    if best_val_acc >= threshold_accuracy:
+        st.success("The model meets the performance criteria (>= 97% accuracy).")
+    else:
+        st.error("The model does NOT meet the performance criteria (>= 97% accuracy).")
 
 # Ethics & NDA Page
 elif menu == "🔒 Ethics & NDA":
