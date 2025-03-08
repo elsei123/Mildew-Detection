@@ -32,7 +32,7 @@ The **Cherry Leaf Mildew Detector** is an AI-based solution designed for sustain
   - Information on ethical considerations and data confidentiality (NDA).
 
 - **Integration with External Data:**  
-  Include a link for downloading the dataset (e.g., from Kaggle) to facilitate access to the images.
+  Include a link for downloading the [dataset](https://www.kaggle.com/datasets/codeinstitute/cherry-leaves) to facilitate access to the images.
 
 ---
 
