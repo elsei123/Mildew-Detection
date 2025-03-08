@@ -81,6 +81,12 @@ st.markdown("""
 st.sidebar.markdown("#### Download Cherry Leaf Images")
 st.sidebar.markdown("[Download Images from Kaggle](https://www.kaggle.com/datasets/codeinstitute/cherry-leaves)")
 
+# Function to list images in a folder
+def list_images_in_folder(folder):
+    """Returns a list of image file paths from a given directory."""
+    if os.path.exists(folder):
+        return [os.path.join(folder, f) for f in os.listdir(folder) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
+    return []
 
 # Set the page title
 st.title("🍒 Cherry Leaf Mildew Detector 🍃")
@@ -240,7 +246,6 @@ elif menu == "🔍 Findings":
     st.markdown(
         """
         ### Visual Analysis of Cherry Leaf Images
-        
         To better understand the dataset and the differences between **healthy** and **powdery mildew-infected** leaves, 
         we conducted a thorough visual study that includes:
         
@@ -252,7 +257,7 @@ elif menu == "🔍 Findings":
         """
     )
 
-    data_dir = "../cherry-leaves/"
+    data_dir = "cherry-leaves/"  # Adjust the path based on your structure
     classes = ["healthy", "powdery_mildew"]
 
     for cls in classes:
@@ -260,46 +265,50 @@ elif menu == "🔍 Findings":
         folder = os.path.join(data_dir, cls)
         files = list_images_in_folder(folder)
 
-        if files:
-            sum_image = None
-            count = 0
-            images = []
-            
-            for f in files:
-                img_path = os.path.join(folder, f)
-                image = cv2.imread(img_path)
-                image = cv2.resize(image, (128, 128))
-                image = image.astype(np.float32)
-                images.append(image)
-                sum_image = image if sum_image is None else sum_image + image
-                count += 1
-            
-            mean_image = (sum_image / count).astype(np.uint8)
-            std_image = np.std(np.array(images), axis=0).astype(np.uint8)
-            
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.image(cv2.cvtColor(mean_image, cv2.COLOR_BGR2RGB), 
-                         caption=f"📌 Mean Image - {cls.capitalize()}")
-                st.markdown("**The average image shows the dominant features of this class.**")
-            with col2:
-                st.image(cv2.cvtColor(std_image, cv2.COLOR_BGR2RGB), 
-                         caption=f"📌 Variability Map - {cls.capitalize()}")
-                st.markdown("**Variability highlights intra-class differences, revealing feature inconsistencies.**")
-            with col3:
-                montage_images = []
-                for sample in files[:6]:
-                    sample_path = os.path.join(folder, sample)
-                    img = cv2.imread(sample_path)
-                    img = cv2.resize(img, (128, 128))
-                    montage_images.append(img)
-                if montage_images:
-                    montage = np.hstack(montage_images)
-                    st.image(cv2.cvtColor(montage, cv2.COLOR_BGR2RGB), 
-                             caption=f"📌 Montage - {cls.capitalize()}")
-                    st.markdown("**A collage of sample images provides an overall view of the class.**")
-        else:
-            st.warning(f"No images found for class {cls}.")
+        if len(files) == 0:
+            st.warning(f"No images found for class {cls}. Please check the dataset folder.")
+            continue  # Skip to the next class if no images are found
+
+        sum_image = None
+        images = []
+        count = 0
+
+        # Process images to calculate Mean Image and Variability Map
+        for img_path in files:
+            image = cv2.imread(img_path)
+
+            if image is None:
+                st.error(f"Failed to load image: {img_path}")
+                continue
+
+            image = cv2.resize(image, (128, 128))
+            image = image.astype(np.float32)
+            images.append(image)
+            sum_image = image if sum_image is None else sum_image + image
+            count += 1
+
+        # Compute mean image and variability
+        mean_image = (sum_image / count).astype(np.uint8)
+        std_image = np.std(np.array(images), axis=0).astype(np.uint8)
+
+        # Create Montage
+        montage_images = [cv2.resize(cv2.imread(img_path), (128, 128)) for img_path in files[:6] if cv2.imread(img_path) is not None]
+        montage = np.hstack(montage_images) if montage_images else None
+
+        # Display Images in Columns
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.image(cv2.cvtColor(mean_image, cv2.COLOR_BGR2RGB), caption=f"📌 Mean Image - {cls.capitalize()}")
+            st.markdown("**The average image shows the dominant features of this class.**")
+        with col2:
+            st.image(cv2.cvtColor(std_image, cv2.COLOR_BGR2RGB), caption=f"📌 Variability Map - {cls.capitalize()}")
+            st.markdown("**Variability highlights intra-class differences, revealing feature inconsistencies.**")
+        with col3:
+            if montage is not None:
+                st.image(cv2.cvtColor(montage, cv2.COLOR_BGR2RGB), caption=f"📌 Montage - {cls.capitalize()}")
+                st.markdown("**A collage of sample images provides an overall view of the class.**")
+            else:
+                st.warning(f"Not enough images to generate a montage for {cls}.")
 
     st.markdown(
         """
@@ -310,147 +319,6 @@ elif menu == "🔍 Findings":
         - The **Montage** illustrates distinct visual patterns that differentiate the two classes.
         
         These findings validate the effectiveness of using visual cues for precise disease detection.
-        """
-    )
-
-    st.title("🔍 Key Findings and Insights")
-
-    st.markdown(
-        """
-        ### Visual Analysis of Cherry Leaf Images
-        To better understand the dataset and the differences between **healthy** and **powdery mildew-infected** leaves, 
-        we conducted a thorough visual study. This includes:
-        
-        - **Mean Image:** The average image per class, highlighting common features.
-        - **Variability Map:** The standard deviation of images within each class, showing intra-class variations.
-        - **Montage:** A collage of sample images providing an overview of the dataset's diversity.
-
-        These analyses help identify unique characteristics of diseased leaves, which the model learns to detect.
-        """
-    )
-
-    data_dir = "../cherry-leaves/"
-    classes = ["healthy", "powdery_mildew"]
-
-    for cls in classes:
-        st.markdown(f"### 🍃 Class: {cls.capitalize()}")
-        folder = os.path.join(data_dir, cls)
-        files = list_images_in_folder(folder)
-
-        if files:
-            sum_image = None
-            count = 0
-            images = []
-            
-            for f in files:
-                img_path = os.path.join(folder, f)
-                image = cv2.imread(img_path)
-                image = cv2.resize(image, (128, 128))
-                image = image.astype(np.float32)
-                images.append(image)
-                sum_image = image if sum_image is None else sum_image + image
-                count += 1
-            
-            mean_image = (sum_image / count).astype(np.uint8)
-            std_image = np.std(np.array(images), axis=0).astype(np.uint8)
-
-            col1, col2, col3 = st.columns(3)
-
-            with col1:
-                st.image(cv2.cvtColor(mean_image, cv2.COLOR_BGR2RGB), caption=f"📌 Mean Image - {cls.capitalize()}")
-                st.markdown("**The average image shows the dominant features of this class.**")
-
-            with col2:
-                st.image(cv2.cvtColor(std_image, cv2.COLOR_BGR2RGB), caption=f"📌 Variability Map - {cls.capitalize()}")
-                st.markdown("**Variability highlights intra-class differences, showing feature inconsistencies.**")
-
-            with col3:
-                montage_images = []
-                for sample in files[:6]:
-                    sample_path = os.path.join(folder, sample)
-                    img = cv2.imread(sample_path)
-                    img = cv2.resize(img, (128, 128))
-                    montage_images.append(img)
-
-                if montage_images:
-                    montage = np.hstack(montage_images)
-                    st.image(cv2.cvtColor(montage, cv2.COLOR_BGR2RGB), caption=f"📌 Montage - {cls.capitalize()}")
-                    st.markdown("**A collage of sample images provides an overall view of dataset variability.**")
-
-        else:
-            st.warning(f"No images found for class {cls}.")
-
-    st.markdown(
-        """
-        ### 🔍 Summary & Key Observations
-        - The **Mean Image** of healthy leaves exhibits a consistent color and structure, whereas infected leaves display irregularities.
-        - The **Variability Map** shows higher variation in infected leaves, reflecting the randomness of fungal spread.
-        - The **Montage** highlights visual patterns that differentiate the two classes.
-        
-        These findings validate the effectiveness of visual cues in training a machine learning model for **precise disease detection**.
-        """
-    )
-
-    st.title("🔍 Findings")
-    st.markdown("### Visual Study of Cherry Leaf Images")
-    st.markdown(
-        """
-        This section presents a detailed visual analysis of the cherry leaf dataset.
-        For each class, we display:
-        - **Mean Image:** The average visual representation highlighting common features.
-        - **Variability:** The standard deviation image, illustrating intra-class variations.
-        - **Montage:** A collage of sample images offering an overall view of the dataset.
-        """
-    )
-
-    data_dir = "../cherry-leaves/"
-    classes = ['healthy', 'powdery_mildew']
-
-    for cls in classes:
-        st.markdown(f"#### Class: {cls.capitalize()}")
-        folder = os.path.join(data_dir, cls)
-        files = list_images_in_folder(folder)
-        if files:
-            sum_image = None
-            count = 0
-            images = []
-            for f in files:
-                img_path = os.path.join(folder, f)
-                image = cv2.imread(img_path)
-                image = cv2.resize(image, (128, 128))
-                image = image.astype(np.float32)
-                images.append(image)
-                sum_image = image if sum_image is None else sum_image + image
-                count += 1
-            mean_image = (sum_image / count).astype(np.uint8)
-            std_image = np.std(np.array(images), axis=0).astype(np.uint8)
-            
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.image(cv2.cvtColor(mean_image, cv2.COLOR_BGR2RGB), caption=f"Mean Image: {cls.capitalize()}")
-                st.markdown("**Mean Image:** Represents the average visual characteristics of the class.")
-            with col2:
-                st.image(cv2.cvtColor(std_image, cv2.COLOR_BGR2RGB), caption=f"Variability: {cls.capitalize()}")
-                st.markdown("**Variability:** Shows the standard deviation across images, highlighting variations within the class.")
-            with col3:
-                montage_images = []
-                for sample in files[:6]:
-                    sample_path = os.path.join(folder, sample)
-                    img = cv2.imread(sample_path)
-                    img = cv2.resize(img, (128, 128))
-                    montage_images.append(img)
-                if montage_images:
-                    montage = np.hstack(montage_images)
-                    st.image(cv2.cvtColor(montage, cv2.COLOR_BGR2RGB), caption=f"Montage: {cls.capitalize()}")
-                    st.markdown("**Montage:** A collage of sample images providing an overall view of the class.")
-        else:
-            st.write(f"No images found for class {cls}.")
-    st.markdown("### Summary")
-    st.markdown(
-        """
-        The visual analysis reveals distinct differences between healthy cherry leaves and those affected by powdery mildew.
-        The **mean images** emphasize the dominant features, the **variability images** highlight intra-class differences,
-        and the **montages** offer a comprehensive visual overview of the dataset.
         """
     )
 
