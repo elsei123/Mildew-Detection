@@ -174,6 +174,15 @@ elif menu == "📸 Prediction":
         df_results = pd.DataFrame(results)
         st.dataframe(df_results)
 
+        csv = df_results.to_csv(index=False).encode('utf-8')
+        st.download_button(
+            label="Download Results Table",
+            data=csv,
+            file_name='prediction_results.csv',
+            mime='text/csv'
+        )
+
+
 # Analysis Page
 elif menu == "📊 Analysis":
     st.header("📈 Model Analysis")
