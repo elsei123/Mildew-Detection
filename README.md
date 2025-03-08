@@ -1,113 +1,155 @@
-# ![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# Cherry Leaf Mildew Detector
 
-## Template Instructions
+The **Cherry Leaf Mildew Detector** is an AI-based solution designed for sustainable agriculture. The project aims to automatically and accurately identify whether a cherry leaf is healthy or infected with powdery mildew, enabling quick and effective decision-making to prevent crop losses.
 
-Welcome,
+---
 
-This is the Code Institute student template for the Cherry Leaves project option in Predictive Analytics. We have preinstalled all of the tools you need to get started. It's perfectly okay to use this template as the basis for your project submissions. Click the `Use this template` button above to get started.
+## Índice
 
-You can safely delete the Template Instructions section of this README.md file and modify the remaining paragraphs for your own project. Please do read the Template Instructions at least once, though! It contains some important information about the IDE and the extensions we use.
+- [Project Requirements](#project-requirements)
+- [Features](#features)
+- [Data and Model](#data-and-model)
+- [Dashboard Details](#dashboard-details)
+- [Ethical Considerations and NDA](#ethical-considerations-and-nda)
+- [Future Improvements](#future-improvements)
 
-## How to use this repo
+---
 
-1. Use this template to create your GitHub project repo
+## Project Requirements
 
-1. In your newly created repo click on the green Code button. 
+- **Visual Analysis:**  
+  Perform visual studies to distinguish healthy leaves from those affected by powdery mildew.
 
-1. Then, from the Codespaces tab, click Create codespace on main.
+- **Automated Prediction:**  
+  Develop a machine learning system using a Convolutional Neural Network (CNN) that predicts if a leaf is healthy or infected, with a minimum target accuracy of 97%.
 
-1. Wait for the workspace to open. This can take a few minutes.
+- **Interactive Dashboard:**  
+  Provide a dashboard that offers:
+  - A project summary detailing the dataset and client requirements.
+  - Visual analyses (mean images, variability, and image montages) to highlight differences between classes.
+  - A prediction interface that allows image uploads, displays prediction results, and offers CSV download options.
+  - Technical details of the model and its performance metrics.
+  - Information on ethical considerations and data confidentiality (NDA).
 
-1. Open a new terminal and `pip3 install -r requirements.txt`
+- **Integration with External Data:**  
+  Include a link for downloading the dataset (e.g., from Kaggle) to facilitate access to the images.
 
-1. Open the jupyter_notebooks directory, and click on the notebook you want to open.
+---
 
-1. Click the kernel button and choose Python Environments.
+## Features
 
-Note that the kernel says Python 3.12.1 as it inherits from the workspace, so it will be Python-3.12.1 as installed by Codespaces. To confirm this, you can use `! python --version` in a notebook code cell.
+- **Interactive Dashboard:**  
+  Built with Streamlit, the dashboard enables you to:
+  - Understand the project's context and the benefits of early mildew detection.
+  - Upload images for prediction, view results with graphs and tables, and download prediction data.
+  - Analyze data distribution and monitor the evolution of the model's accuracy.
+  - Access detailed visual analysis including:
+    - **Mean Image:** Represents the average visual characteristics of each class.
+    - **Variability:** Highlights internal variation among images.
+    - **Montage:** Displays a collage of sample images from each class.
+  - Review technical details of the model and its training metrics.
+  - Explore the Ethics & NDA section, reinforcing the confidentiality of the data.
 
-## Cloud IDE Reminders
+- **Machine Learning Model:**  
+  A CNN built with TensorFlow/Keras for binary classification (healthy vs. powdery mildew), enhanced by data augmentation techniques.
 
-To log into the Heroku toolbelt CLI:
+- **Result Download:**  
+  Users can download prediction results in CSV format for further analysis.
 
-1. Log in to your Heroku account and go to _Account Settings_ in the menu under your avatar.
-2. Scroll down to the _API Key_ and click _Reveal_
-3. Copy the key
-4. In the terminal, run `heroku_config`
-5. Paste in your API key when asked
+---
 
-You can now use the `heroku` CLI program - try running `heroku apps` to confirm it works. This API key is unique and private to you, so do not share it. If you accidentally make it public, then you can create a new one with _Regenerate API Key_.
+## Data and Model
 
-## Dataset Content
+### Dataset
 
-- The dataset is sourced from [Kaggle](https://www.kaggle.com/codeinstitute/cherry-leaves). We then created a fictitious user story where predictive analytics can be applied in a real project in the workplace.
-- The dataset contains +4 thousand images taken from the client's crop fields. The images show healthy cherry leaves and cherry leaves that have powdery mildew, a fungal disease that affects many plant species. The cherry plantation crop is one of the finest products in their portfolio, and the company is concerned about supplying the market with a compromised quality product.
+The dataset consists of cherry leaf images organized into two categories:
+- **healthy:** Images of healthy cherry leaves.
+- **powdery_mildew:** Images of leaves infected with powdery mildew.
 
-## Business Requirements
+### Model
 
-The cherry plantation crop from Farmy & Foods is facing a challenge where their cherry plantations have been presenting powdery mildew. Currently, the process is manual verification if a given cherry tree contains powdery mildew. An employee spends around 30 minutes in each tree, taking a few samples of tree leaves and verifying visually if the leaf tree is healthy or has powdery mildew. If there is powdery mildew, the employee applies a specific compound to kill the fungus. The time spent applying this compound is 1 minute. The company has thousands of cherry trees located on multiple farms across the country. As a result, this manual process is not scalable due to the time spent in the manual process inspection.
+- **Architecture:**  
+  The model employs a Convolutional Neural Network (CNN) featuring:
+  - **Convolution and Pooling Layers:** For feature extraction and dimensionality reduction.
+  - **Flatten Layer:** To convert activation maps into a vector.
+  - **Dense Layers with Dropout:** To prevent overfitting.
+  - **Output Layer:** A sigmoid-activated layer for binary classification.
 
-To save time in this process, the IT team suggested an ML system that detects instantly, using a leaf tree image, if it is healthy or has powdery mildew. A similar manual process is in place for other crops for detecting pests, and if this initiative is successful, there is a realistic chance to replicate this project for all other crops. The dataset is a collection of cherry leaf images provided by Farmy & Foods, taken from their crops.
+- **Training:**  
+  The model is trained with:
+  - **Data Augmentation:** Using `ImageDataGenerator` to expand the dataset.
+  - **Data Split:** 80% for training and 20% for validation.
+  - **Configuration:** 10 epochs, the Adam optimizer, and Binary Crossentropy loss.
+  - **Target:** Achieve at least 97% validation accuracy.
 
-- 1 - The client is interested in conducting a study to visually differentiate a healthy cherry leaf from one with powdery mildew.
-- 2 - The client is interested in predicting if a cherry leaf is healthy or contains powdery mildew.
+- **Model Saving and Loading:**  
+  After training, the model is saved to `src/model.h5` and loaded with caching to ensure efficient use in the dashboard.
 
-## Hypothesis and how to validate?
+---
 
-- List here your project hypothesis(es) and how you envision validating it (them).
+## Dashboard Details
 
-## The rationale to map the business requirements to the Data Visualisations and ML tasks
+### Home
+- **Project Overview:**  
+  Introduces the project, outlining the importance of early mildew detection and its benefits for sustainable agriculture.
 
-- List your business requirements and a rationale to map them to the Data Visualisations and ML tasks.
+### Prediction
+- **Image Upload & Analysis:**  
+  Users can upload cherry leaf images. The system resizes and displays the images, performs predictions, and shows probability graphs for each class.
+- **Result Table:**  
+  Displays image names and prediction results, with an option to download the table as a CSV file.
 
-## ML Business Case
+### Analysis
+- **Graphical Visualizations:**  
+  Provides charts that illustrate:
+  - The distribution of predictions (bar chart).
+  - The proportion of healthy versus infected leaves (pie chart).
+  - The evolution of model accuracy over time (line chart).
 
-- In the previous bullet, you potentially visualised an ML task to answer a business requirement. You should frame the business case using the method we covered in the course.
+### Findings
+- **Detailed Visual Study:**  
+  Presents in-depth visual analyses:
+  - **Mean Image:** Shows the average appearance of each class.
+  - **Variability:** Highlights internal variations (standard deviation) within each class.
+  - **Montage:** Displays a collage of sample images to represent each class.
 
-## Dashboard Design
+### Hypothesis
+- **Approach & Validation:**  
+  Outlines the project hypothesis, explaining how combining visual analysis with CNNs can effectively differentiate the classes, and details the validation strategy to meet the performance target.
 
-- List all dashboard pages and their content, either blocks of information or widgets, like buttons, checkboxes, images, or any other items, that your dashboard library supports.
-- Finally, during the project development, you may revisit your dashboard plan to update a given feature (for example, at the beginning of the project, you were confident you would use a given plot to display an insight, but later, you chose another plot type).
+### Technical
+- **Model Details:**  
+  Provides comprehensive information about the model architecture, training procedures, and performance metrics, including a summary of the model.
 
-## Unfixed Bugs
+### Ethics & NDA
+- **Data Confidentiality:**  
+  Explains that the dataset is provided under a Non-Disclosure Agreement (NDA), with strict measures in place to ensure data confidentiality and restrict access to authorized personnel only.
 
-- You will need to mention unfixed bugs and why they were unfixed. This section should include shortcomings of the frameworks or technologies used. Although time can be a significant variable for consideration, paucity of time and difficulty understanding implementation is not a valid reason to leave bugs unfixed.
+### Download Link
+- **Dataset Access:**  
+  A sidebar link directs users to download the cherry leaf images from an external source (e.g., Kaggle).
 
-## Deployment
+---
 
-### Heroku
+## Ethical Considerations and NDA
 
-- The App live link is: `https://YOUR_APP_NAME.herokuapp.com/`
-- Set the runtime.txt Python version to a [Heroku-20](https://devcenter.heroku.com/articles/python-support#supported-runtimes) stack currently supported version.
-- The project was deployed to Heroku using the following steps.
+The data used in this project is provided under a Non-Disclosure Agreement (NDA) and is strictly confidential. Access is restricted to authorized personnel only, and sharing images or results with unauthorized third parties is prohibited. Robust security measures are in place to ensure compliance with the NDA terms.
 
-1. Log in to Heroku and create an App
-2. At the Deploy tab, select GitHub as the deployment method.
-3. Select your repository name and click Search. Once it is found, click Connect.
-4. Select the branch you want to deploy, then click Deploy Branch.
-5. The deployment process should happen smoothly if all deployment files are fully functional. Click the button Open App on the top of the page to access your App.
-6. If the slug size is too large, then add large files not required for the app to the .slugignore file.
+---
 
-## Main Data Analysis and Machine Learning Libraries
+## Future Improvements
 
-- Here, you should list the libraries used in the project and provide an example(s) of how you used these libraries.
-
-## Credits
-
-- In this section, you need to reference where you got your content, media and from where you got extra help. It is common practice to use code from other repositories and tutorials. However, it is necessary to be very specific about these sources to avoid plagiarism.
-- You can break the credits section up into Content and Media, depending on what you have included in your project.
-
-### Content
-
-- The text for the Home page was taken from Wikipedia Article A.
-- Instructions on how to implement form validation on the Sign-Up page were taken from [Specific YouTube Tutorial](https://www.youtube.com/).
-- The icons in the footer were taken from [Font Awesome](https://fontawesome.com/).
-
-### Media
-
-- The photos used on the home and sign-up page are from This Open-Source site.
-- The images used for the gallery page were taken from this other open-source site.
-
-## Acknowledgements (optional)
-
-- Thank the people who provided support throughout this project.
+- **Real Metric Integration:**  
+  Update graphs and performance comparisons with actual training results.
+  
+- **Quantitative Dataset Analysis:**  
+  Include detailed statistics, such as the total number of images, class distribution, and variability analysis.
+  
+- **Model Optimization:**  
+  Explore alternative architectures and techniques to further improve accuracy and reduce the model size for easier deployment.
+  
+- **Dashboard Enhancements:**  
+  Improve interactivity and usability by providing more detailed user feedback.
+  
+- **Expanded Documentation:**  
+  Offer more comprehensive documentation of the data pipeline, training procedures, and ethical practices.
