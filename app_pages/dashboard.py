@@ -237,7 +237,7 @@ elif menu == "🔍 Findings":
         - **Montage:** A collage of sample images offering an overall view of the dataset.
         """
     )
-    
+
     data_dir = "../cherry-leaves/"
     classes = ['healthy', 'powdery_mildew']
 
@@ -263,8 +263,10 @@ elif menu == "🔍 Findings":
             col1, col2, col3 = st.columns(3)
             with col1:
                 st.image(cv2.cvtColor(mean_image, cv2.COLOR_BGR2RGB), caption=f"Mean Image: {cls.capitalize()}")
+                st.markdown("**Mean Image:** Represents the average visual characteristics of the class.")
             with col2:
                 st.image(cv2.cvtColor(std_image, cv2.COLOR_BGR2RGB), caption=f"Variability: {cls.capitalize()}")
+                st.markdown("**Variability:** Shows the standard deviation across images, highlighting variations within the class.")
             with col3:
                 montage_images = []
                 for sample in files[:6]:
@@ -275,8 +277,17 @@ elif menu == "🔍 Findings":
                 if montage_images:
                     montage = np.hstack(montage_images)
                     st.image(cv2.cvtColor(montage, cv2.COLOR_BGR2RGB), caption=f"Montage: {cls.capitalize()}")
+                    st.markdown("**Montage:** A collage of sample images providing an overall view of the class.")
         else:
             st.write(f"No images found for class {cls}.")
+    st.markdown("### Summary")
+    st.markdown(
+        """
+        The visual analysis reveals distinct differences between healthy cherry leaves and those affected by powdery mildew.
+        The **mean images** emphasize the dominant features, the **variability images** highlight intra-class differences,
+        and the **montages** offer a comprehensive visual overview of the dataset.
+        """
+    )
 
 # Hypothesis Page
 elif menu == "🧪 Hypothesis":
