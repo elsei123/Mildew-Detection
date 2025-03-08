@@ -301,19 +301,35 @@ elif menu == "🔍 Findings":
 # Hypothesis Page
 elif menu == "🧪 Hypothesis":
     st.title("🧪 Hypothesis and Validation")
-    st.markdown("""
-    **Hypothesis:**  
-    Visual analysis combined with a CNN can effectively differentiate healthy cherry leaves from those infected with powdery mildew.
+    st.markdown(
+        """
+        ### Hypothesis
+        We hypothesize that combining detailed visual analysis with a robust Convolutional Neural Network (CNN) can accurately distinguish between healthy cherry leaves and those infected with powdery mildew. This approach leverages subtle differences in texture, color distribution, and structural features inherent to each condition.
 
-    **Validation Approach:**  
-    - Train and validate a CNN model.
-    - Compare predictions against real data.
-    - Perform visual analysis (mean image, variability, montage) to highlight differences.
-    
-    **Performance Goal:**  
-    Achieve at least 97% prediction accuracy.
-    """)
-    st.markdown("Validation results and model analysis metrics are presented on the 'Analysis' page.")
+        ### Validation Approach
+        - **Data Preparation:**  
+          Curate a balanced dataset of cherry leaf images, ensuring both healthy and diseased samples are well-represented.
+        - **Model Training:**  
+          Train the CNN using techniques such as data augmentation, regularization, and hyperparameter tuning to optimize performance.
+        - **Visual Analysis:**  
+          - **Mean Image:** Generate an average image per class to capture dominant visual characteristics.
+          - **Variability Map:** Compute standard deviation images to highlight intra-class differences.
+          - **Montage Display:** Create collages of sample images for an intuitive visual comparison.
+        - **Performance Evaluation:**  
+          Evaluate the model against ground truth labels using metrics like accuracy, precision, and recall.
+
+        ### Performance Goal
+        Our target is to achieve a validation accuracy of at least **97%**. Reaching this threshold would demonstrate the model's robustness for early disease detection, supporting proactive intervention in agricultural practices.
+
+        ### Future Enhancements
+        - Explore deeper architectures or ensemble methods for further performance improvements.
+        - Integrate real-time monitoring features for in-field applications.
+        - Extend visual analytics to refine model interpretability and decision-making.
+
+        **Note:** Detailed validation results and model performance metrics are presented on the 'Analysis' page.
+        """,
+        unsafe_allow_html=True,
+    )
 
 # Technical Page
 elif menu == "💻 Technical":
