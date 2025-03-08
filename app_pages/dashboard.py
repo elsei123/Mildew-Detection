@@ -87,7 +87,7 @@ st.title("🍒 Cherry Leaf Mildew Detector 🍃")
 
 # Sidebar menu for navigation
 menu = st.sidebar.radio(
-    "📌 Navigation", ["🏠 Home", "📸 Prediction", "📊 Analysis",  "🔍 Findings", "🧪 Hypothesis", "💻 Technical"])
+    "📌 Navigation", ["🏠 Home", "📸 Prediction", "📊 Analysis",  "🔍 Findings", "🧪 Hypothesis", "💻 Technical","🔒 Ethics & NDA"])
 
 # Home Page
 if menu == "🏠 Home":
@@ -343,3 +343,27 @@ elif menu == "💻 Technical":
         st.text("\n".join(model_summary))
     else:
         st.write("Model is not available for summary display.")
+
+# Ethics & NDA Page
+elif menu == "🔒 Ethics & NDA":
+    st.title("🔒 Ethical Considerations & NDA")
+    st.markdown("""
+    **Ethical Considerations and Data Confidentiality**
+
+    This project uses a dataset provided under a Non-Disclosure Agreement (NDA). Therefore, the following measures are enforced:
+
+    - **Data Confidentiality:**  
+      All provided data is confidential and must only be accessed by authorized personnel involved in the project.
+    
+    - **Restricted Data Sharing:**  
+      The data, including images and results, should not be shared externally or with any unauthorized third parties.
+      
+    - **Usage Limitations:**  
+      The dataset is strictly for the purpose of analyzing and developing a model to detect powdery mildew on cherry leaves. Any other use is prohibited.
+    
+    - **Compliance:**  
+      All data handling complies with the terms of the NDA, ensuring privacy and security.
+      
+    - **Security Measures:**  
+      Secure storage and controlled access mechanisms are implemented to protect the data from unauthorized access.
+    """, unsafe_allow_html=True)
