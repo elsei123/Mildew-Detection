@@ -235,6 +235,84 @@ elif menu == "📊 Analysis":
 
 # Findings Page
 elif menu == "🔍 Findings":
+    st.title("🔍 Key Findings and Insights")
+
+    st.markdown(
+        """
+        ### Visual Analysis of Cherry Leaf Images
+        To better understand the dataset and the differences between **healthy** and **powdery mildew-infected** leaves, 
+        we conducted a thorough visual study. This includes:
+        
+        - **Mean Image:** The average image per class, highlighting common features.
+        - **Variability Map:** The standard deviation of images within each class, showing intra-class variations.
+        - **Montage:** A collage of sample images providing an overview of the dataset's diversity.
+
+        These analyses help identify unique characteristics of diseased leaves, which the model learns to detect.
+        """
+    )
+
+    data_dir = "../cherry-leaves/"
+    classes = ["healthy", "powdery_mildew"]
+
+    for cls in classes:
+        st.markdown(f"### 🍃 Class: {cls.capitalize()}")
+        folder = os.path.join(data_dir, cls)
+        files = list_images_in_folder(folder)
+
+        if files:
+            sum_image = None
+            count = 0
+            images = []
+            
+            for f in files:
+                img_path = os.path.join(folder, f)
+                image = cv2.imread(img_path)
+                image = cv2.resize(image, (128, 128))
+                image = image.astype(np.float32)
+                images.append(image)
+                sum_image = image if sum_image is None else sum_image + image
+                count += 1
+            
+            mean_image = (sum_image / count).astype(np.uint8)
+            std_image = np.std(np.array(images), axis=0).astype(np.uint8)
+
+            col1, col2, col3 = st.columns(3)
+
+            with col1:
+                st.image(cv2.cvtColor(mean_image, cv2.COLOR_BGR2RGB), caption=f"📌 Mean Image - {cls.capitalize()}")
+                st.markdown("**The average image shows the dominant features of this class.**")
+
+            with col2:
+                st.image(cv2.cvtColor(std_image, cv2.COLOR_BGR2RGB), caption=f"📌 Variability Map - {cls.capitalize()}")
+                st.markdown("**Variability highlights intra-class differences, showing feature inconsistencies.**")
+
+            with col3:
+                montage_images = []
+                for sample in files[:6]:
+                    sample_path = os.path.join(folder, sample)
+                    img = cv2.imread(sample_path)
+                    img = cv2.resize(img, (128, 128))
+                    montage_images.append(img)
+
+                if montage_images:
+                    montage = np.hstack(montage_images)
+                    st.image(cv2.cvtColor(montage, cv2.COLOR_BGR2RGB), caption=f"📌 Montage - {cls.capitalize()}")
+                    st.markdown("**A collage of sample images provides an overall view of dataset variability.**")
+
+        else:
+            st.warning(f"No images found for class {cls}.")
+
+    st.markdown(
+        """
+        ### 🔍 Summary & Key Observations
+        - The **Mean Image** of healthy leaves exhibits a consistent color and structure, whereas infected leaves display irregularities.
+        - The **Variability Map** shows higher variation in infected leaves, reflecting the randomness of fungal spread.
+        - The **Montage** highlights visual patterns that differentiate the two classes.
+        
+        These findings validate the effectiveness of visual cues in training a machine learning model for **precise disease detection**.
+        """
+    )
+
     st.title("🔍 Findings")
     st.markdown("### Visual Study of Cherry Leaf Images")
     st.markdown(
