@@ -78,6 +78,10 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+st.sidebar.markdown("#### Download Cherry Leaf Images")
+st.sidebar.markdown("[Download Images from Kaggle](https://www.kaggle.com/datasets/codeinstitute/cherry-leaves)")
+
+
 # Set the page title
 st.title("🍒 Cherry Leaf Mildew Detector 🍃")
 
@@ -221,9 +225,19 @@ elif menu == "📊 Analysis":
         st.caption("Model accuracy history during training (sample data)")
 
 # Findings Page
-elif page == "🔍 Findings":
+elif menu == "🔍 Findings":
     st.title("🔍 Findings")
     st.markdown("### Visual Study of Cherry Leaf Images")
+    st.markdown(
+        """
+        This section presents a detailed visual analysis of the cherry leaf dataset.
+        For each class, we display:
+        - **Mean Image:** The average visual representation highlighting common features.
+        - **Variability:** The standard deviation image, illustrating intra-class variations.
+        - **Montage:** A collage of sample images offering an overall view of the dataset.
+        """
+    )
+    
     data_dir = "../cherry-leaves/"
     classes = ['healthy', 'powdery_mildew']
 
@@ -265,7 +279,7 @@ elif page == "🔍 Findings":
             st.write(f"No images found for class {cls}.")
 
 # Hypothesis Page
-elif page == "🧪 Hypothesis":
+elif menu == "🧪 Hypothesis":
     st.title("🧪 Hypothesis and Validation")
     st.markdown("""
     **Hypothesis:**  
@@ -282,7 +296,7 @@ elif page == "🧪 Hypothesis":
     st.markdown("Validation results and model analysis metrics are presented on the 'Analysis' page.")
 
 # Technical Page
-elif page == "💻 Technical":
+elif menu == "💻 Technical":
     st.title("💻 Technical Details")
     st.markdown("### Model Architecture and Performance")
     st.markdown("""
