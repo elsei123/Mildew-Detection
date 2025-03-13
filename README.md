@@ -4,7 +4,7 @@ The **Cherry Leaf Mildew Detector** is an AI-based solution designed for sustain
 
 ---
 
-## Índice
+## Table of Contents
 
 - [Project Requirements](#project-requirements)
 - [Features](#features)
