@@ -127,7 +127,7 @@ The dataset consists of cherry leaf images organized into two categories:
 
 ### Download Link
 - **Dataset Access:**  
-  A sidebar link directs users to download the cherry leaf images from an external source (e.g., Kaggle).
+  A sidebar link directs users to download the cherry leaf images from an external source, [Kaggle](https://www.kaggle.com/datasets/codeinstitute/cherry-leaves).
 
 ---
 
